@@ -11,12 +11,15 @@ function App() {
   const [greetMsg, setGreetMsg] = useState("");
   const [name, setName] = useState("");
   
+
+  
   async function greet() {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
     setName(await invoke("zip_path"))
   }
 
   useEffect(() => {
+    window.addEventListener("sus", e => console.log);
     greet();
   }, []);
   return (
