@@ -1,29 +1,35 @@
 import { useState, useEffect } from "react";
-import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/core";
-import { runtimeDir } from '@tauri-apps/api/path';
-
+import { getCurrentWindow } from '@tauri-apps/api/window';
+import BoxBtn from "./components/BoxBtn";
+import IndexPage from "./pages/Index";
+import ExtractPage from "./pages/Extract";
 import "./App.css";
 
 
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+  const [appPath, setAppPath] = useState("");
+  const [os, setOs] = useState("");
   
 
   
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setName(await invoke("zip_path"))
+  async function setup() {
+    setOs(await invoke("get_os"));
+    setAppPath(await invoke("select_path"))
   }
 
   useEffect(() => {
-    window.addEventListener("sus", e => console.log);
-    greet();
+    setup();
   }, []);
   return (
-    <>{name}</>
+    <>
+      {appPath}
+      {(!appPath)?
+      <IndexPage/>:
+        <ExtractPage/>
+      }
+    </>
   );
 }
 
